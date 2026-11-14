@@ -30,6 +30,9 @@ const ChangeDetectionPage = lazy(() =>
 const DashboardPage = lazy(() =>
   import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage }))
 );
+const HowToUsePage = lazy(() =>
+  import('./pages/HowToUsePage').then((m) => ({ default: m.HowToUsePage }))
+);
 const AboutPage = lazy(() =>
   import('./pages/AboutPage').then((m) => ({ default: m.AboutPage }))
 );
@@ -240,6 +243,10 @@ export default function App() {
                 sites={SAR_OBSERVATION_SITES}
                 onOpenInPage={handleSelectSiteAndNavigate}
               />
+            )}
+
+            {activePage === 'how-to-use' && (
+              <HowToUsePage onNavigate={setActivePage} />
             )}
 
             {activePage === 'about' && <AboutPage onNavigate={setActivePage} />}

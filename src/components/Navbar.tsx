@@ -15,6 +15,7 @@ const NAV_ITEMS: { id: PageId; label: string }[] = [
   { id: 'visualizer', label: 'Visualizer' },
   { id: 'change-detection', label: 'Change Lab' },
   { id: 'dashboard', label: 'Dashboard' },
+  { id: 'how-to-use', label: 'How to Use' },
   { id: 'about', label: 'About' },
 ];
 
@@ -34,7 +35,7 @@ export function Navbar({
 
   return (
     <header className="sticky top-0 z-40 border-b border-frost-line bg-glacial-abyss/95">
-      <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-8 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         {/* Zone 1: Single text element wordmark */}
         <button
           type="button"
@@ -47,7 +48,7 @@ export function Navbar({
         {/* Zone 2: Clean single-line navigation links */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden lg:flex items-center gap-6"
+          className="hidden lg:flex items-center gap-5"
         >
           {NAV_ITEMS.map((item) => {
             const isActive = activePage === item.id;

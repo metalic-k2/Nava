@@ -147,3 +147,111 @@ export async function fetchMapsGroundingContext(params: {
     model: data.model ?? 'gemini-4-hydrogen',
   };
 }
+
+export interface SeaIceSummary {
+  title: string;
+  units: string;
+  basePeriod: string;
+  decadalTrendMkm2: number;
+  annualMeanMkm2: number;
+  latestPeriod: string;
+  latestExtentMkm2: number;
+  latestBaselineMkm2: number;
+  latestAnomalyMkm2: number;
+}
+
+export interface SeaIceMonthPoint {
+  period: string;
+  label: string;
+  extentMkm2: number;
+  baselineMkm2: number;
+  anomalyMkm2: number;
+}
+
+export interface SeaIceAnnualPoint {
+  year: string;
+  meanExtentMkm2: number;
+  meanAnomalyMkm2: number;
+}
+
+export interface LiveGlacierHourlyPoint {
+  time: string;
+  label: string;
+  tempC: number;
+  snowDepthM: number;
+  meltRateMmDay: number;
+  freezingLevelM: number;
+}
+
+export interface LiveGlacierStation {
+  id: string;
+  siteId: string | null;
+  name: string;
+  region: string;
+  lat: number;
+  lng: number;
+  elevationM: number;
+  observedAt: string;
+  currentTempC: number;
+  currentSnowDepthM: number;
+  publishedIceThicknessM: number;
+  publishedMassTrendGtYr: number;
+  freezingLevelM: number;
+  currentMeltRateMmDay: number;
+  snowDepth24hDeltaCm: number;
+  hourlySeries: LiveGlacierHourlyPoint[];
+}
+
+export interface IcesatGranuleSummary {
+  shortName: string;
+  title: string;
+  datasetId: string;
+  timeStart: string;
+  timeEnd: string;
+  dataCenter: string;
+}
+
+export interface ClimateSourceAttribution {
+  name: string;
+  detail: string;
+  url: string;
+}
+
+export interface GlacialClimateMetricsResponse {
+  fetchedAt: string;
+  seaIceSummary: SeaIceSummary | null;
+  seaIceRecentMonths: SeaIceMonthPoint[];
+  seaIceAnnualTrend: SeaIceAnnualPoint[];
+  glaciers: LiveGlacierStation[];
+  icesatPasses: IcesatGranuleSummary[];
+  sources: ClimateSourceAttribution[];
+}
+
+export async function fetchGlacialClimateMetrics(
+  forceRefresh = false
+): Promise<GlacialClimateMetricsResponse> {
+  const endpoint = forceRefresh
+    ? '/api/climate/glacial-metrics?force=1'
+    : '/api/climate/glacial-metrics';
+  const res = await fetch(endpoint);
+  const data = (await res.json()) as Partial<GlacialClimateMetricsResponse> & {
+    error?: string;
+  };
+  if (!res.ok) {
+    throw new Error(data.error || `Climate endpoint returned HTTP ${res.status}`);
+  }
+  return {
+    fetchedAt: data.fetchedAt ?? new Date().toISOString(),
+    seaIceSummary: data.seaIceSummary ?? null,
+    seaIceRecentMonths: Array.isArray(data.seaIceRecentMonths)
+      ? data.seaIceRecentMonths
+      : [],
+    seaIceAnnualTrend: Array.isArray(data.seaIceAnnualTrend)
+      ? data.seaIceAnnualTrend
+      : [],
+    glaciers: Array.isArray(data.glaciers) ? data.glaciers : [],
+    icesatPasses: Array.isArray(data.icesatPasses) ? data.icesatPasses : [],
+    sources: Array.isArray(data.sources) ? data.sources : [],
+  };
+}
+

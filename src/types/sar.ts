@@ -4,6 +4,7 @@ export type PageId =
   | 'visualizer'
   | 'change-detection'
   | 'dashboard'
+  | 'how-to-use'
   | 'about';
 
 export type ProvenanceTier =

@@ -54,8 +54,13 @@ export function Footer({ onNavigate }: FooterProps) {
                   </button>
                 </li>
                 <li>
+                  <button type="button" onClick={() => go('how-to-use')} className="hover:text-ice-blue">
+                    How to Use
+                  </button>
+                </li>
+                <li>
                   <button type="button" onClick={() => go('about')} className="hover:text-ice-blue">
-                    How It Works
+                    How SAR Works
                   </button>
                 </li>
               </ul>
