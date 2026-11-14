@@ -1,0 +1,6 @@
+{
+  "name": "Dancing with the SARs",
+  "description": "Interactive Synthetic Aperture Radar (SAR) Earth observation platform for NASA Space Apps Challenge 2026 — explore radar imagery, detect floods and land-cover change, and analyze orbital telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

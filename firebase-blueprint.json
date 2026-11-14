@@ -1,0 +1,113 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile anchor for owning bookmarked SAR areas of interest.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Public display label for the researcher."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of latest profile update."
+        }
+      },
+      "required": ["ownerId", "displayName", "updatedAt"]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "Saved SAR Area of Interest and observation note.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID matching parent user document."
+        },
+        "siteId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Identifier of the observation site or granule."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Title of the bookmarked observation area."
+        },
+        "region": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Country or geographic basin name."
+        },
+        "lat": {
+          "type": "number",
+          "description": "Latitude in decimal degrees (-90 to 90)."
+        },
+        "lng": {
+          "type": "number",
+          "description": "Longitude in decimal degrees (-180 to 180)."
+        },
+        "hazardCategory": {
+          "type": "string",
+          "enum": ["flood", "deforestation", "deformation", "cryosphere"],
+          "description": "Environmental change category."
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "User interpretation or comparison note."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when bookmark was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when bookmark was last modified."
+        }
+      },
+      "required": [
+        "ownerId",
+        "siteId",
+        "title",
+        "region",
+        "lat",
+        "lng",
+        "hazardCategory",
+        "note",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User root profile document isolating user-owned subcollections."
+    },
+    "/users/{userId}/bookmarks/{bookmarkId}": {
+      "schema": { "$ref": "#/entities/Bookmark" },
+      "description": "Saved SAR study areas and backscatter notes owned by userId."
+    }
+  }
+}
